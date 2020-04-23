@@ -60,7 +60,7 @@ module controller(op, funct,zero, memtoreg, memwrite, pcsrc, alusrc, regdst, reg
 
     maindec md(op,memtoreg,memwrite,branch,alusrc,regdst,regwrite, jump,aluop); 
 
-    aludec ad (funct, aluop,alucontrol); 
+    aluDecoder ad (funct, aluop,alucontrol); 
 
     assign pcsrc=branch&zero; 
 

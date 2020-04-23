@@ -7,8 +7,8 @@ module dram (input clk, we, input [31:0] adder, write_data, output [31:0] read_d
 	end
 
 	always@(posedge clk)begin
-		if(1'b1==we)begin
-			ram_data[adder] = write_data;
+		if(we)begin
+			ram_data[adder[31:2]] <= write_data;
 		end
 	end
 endmodule
