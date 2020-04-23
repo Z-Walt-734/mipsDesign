@@ -45,24 +45,24 @@ Sorts instructions based on what the outcome is and activates the associated com
 ### Memory Data File
 List of instructions stored in HEX that is read into the Instruction RAM.
 The following is all the instructions in order
-- ADDI $a3 $zero 0x0003
-- ADDI $v1 $zero 0x000C
-- OR $a0 $a3 $v0
-- AND $a1 $v1 $a0
-- ADD $a1 $a1 $a0
-- BEQ $a1 $a3 0x0008
-- SLT $a2 $v1 $a0
-- BEQ $a2 $zero 0x0001
-- ADDI $a1 $zero 0x000A
-- SLT $a2 $a3 $v0
-- ADD $a3 $a2 $a1
-- SUB $a3 $a3 $v0
-- J 0x000000F
-- LW $a3 0x0000 $zero
-- SW $a3 0x0047 $v0
-- CLEAR
-- CLEAR
-- CLEAR
+` ADDI $a3 $zero 0x0003`
+` ADDI $v1 $zero 0x000C`
+` OR $a0 $a3 $v0`
+` AND $a1 $v1 $a0`
+` ADD $a1 $a1 $a0`
+` BEQ $a1 $a3 0x0008`
+` SLT $a2 $v1 $a0`
+` BEQ $a2 $zero 0x0001`
+` ADDI $a1 $zero 0x000A`
+` SLT $a2 $a3 $v0`
+` ADD $a3 $a2 $a1`
+` SUB $a3 $a3 $v0`
+` J 0x000000F`
+` LW $a3 0x0000 $zero`
+` SW $a3 0x0047 $v0`
+` CLEAR`
+` CLEAR`
+` CLEAR`
 
 ### Multiplexer
 Basic Variable bit Multiplexer.
