@@ -1,12 +1,12 @@
 module testbench ();
 	logic clk, reset, mem_write;
 
-	logic [31:0] write_data, data_adder;
+	logic [31:0] write_data, data_addr;
 
-	top dut(clk, reset, write_data, data_adder, mem_write);
+	top dut(clk, reset, write_data, data_addr, mem_write);
 
 	initial begin
-		reset <= 1 #20; 
+		reset <= 1; #20; 
 		reset <= 0;
 	end
 
@@ -17,11 +17,11 @@ module testbench ();
 
 	always@(negedge clk)begin
 		if(mem_write) begin
-			if(data_adder === 84 & write_data === 7)begin
+			if(data_addr === 84 & write_data === 7)begin
 				$display("Success");
 				$stop;
 			end
-			else if(data_adder !== 80)begin
+			else if(data_addr !== 80)begin
 				$display("Error");
 				$stop;
 			end

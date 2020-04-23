@@ -1,7 +1,7 @@
 
 //Creates module 
 
-module ALU(A,b,F,y,Z); 
+module alu(A,b,F,y,Z); 
 
 //Declares inputs and outputs of the circuit 
 // Cleaned up to be verilog instead of systemverilog
@@ -48,23 +48,7 @@ assign Z=(y==0);// if y is 0 Z=1(true), y is 1 Z=0(false)
 
 endmodule 
 
-module controller(op, funct,zero, memtoreg, memwrite, pcsrc, alusrc, regdst, regwrite, jump, alucontrol); 
 
-    input logic [5:0] op, funct; 
-
-    input logic zero; 
-
-    output logic memtoreg, memwrite, pcsrc, alusrc, regdst, regwrite, jump; 
-
-    output logic [2:0] alucontrol; 
-
-    maindec md(op,memtoreg,memwrite,branch,alusrc,regdst,regwrite, jump,aluop); 
-
-    aluDecoder ad (funct, aluop,alucontrol); 
-
-    assign pcsrc=branch&zero; 
-
-endmodule : alu
 
  
 
