@@ -5,12 +5,12 @@ assign {reg_write, reg_dst, alu_src, branch, mem_write, mem_reg, jump, alu_instr
 
 always_comb
 	case(instruc)
-		6'b000000: controls <= 9'b110000010;	// Read
-		6'b100011: controls <= 9'b101001000;	// longword
-		6'b100001: controls <= 9'b001010000;	// shortword
-		6'b000100: controls <= 9'b000100001;	// branch on equal
-		6'b001000: controls <= 9'b101000000;	// add imediate
-		6'b000010: controls <= 9'b000000100;	// jump
+		6'b000000: controls <= 9'b11000000010;	// Read
+		6'b100011: controls <= 9'b11000000010;	// longword
+		6'b100001: controls <= 9'b11000000010;	// shortword
+		6'b000100: controls <= 9'b11000000010;	// branch on equal
+		6'b001000: controls <= 9'b11000000010;	// add imediate
+		6'b000010: controls <= 9'b11000000010;	// jump
 		default: controls <= 9'bxxxxxxxxx; 		// Catch all
 	endcase // operation
 endmodule : maindec
