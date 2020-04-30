@@ -1,9 +1,12 @@
-module top (input clk, reset, output logic [31:0] write_data, data_adder, output logic ram_write);
-	logic [31:0] pc, instruction, read_data;
+module top(input  logic        clk, reset, 
+           output logic [31:0] writedata, dataadr, 
+           output logic        memwrite);
 
-	processor mips (clk, reset, pc, instruction, ram_write, data_adder, write_data, read_data);
-
-	iram iram(pc[7:2], instruction);
-	dram dram(clk, ram_write, data_adder, write_data, read_data);
-
+  logic [31:0] pc, instr, readdata;
+  
+  // instantiate processor and memories
+  processor mips(clk, reset, pc, instr, memwrite, dataadr, 
+            writedata, readdata);
+  iram imem(pc[7:2], instr);
+  dram dmem(clk, memwrite, dataadr, writedata, readdata);
 endmodule

@@ -1,18 +1,38 @@
-module dataPath (input logic clk, reset, mem_to_reg, pc_src, alu_src, regdst, reg_write, jump, input logic [2:0] alu_control, input logic [31:0] read_data, instruction, output logic zero, output logic [31:0] pc, alu_out, write_data);
-	logic [4:0] write_reg;
-	logic [31:0] pc_next, pc_next_br, pc_plus4, pc_branch, sign_immediate, sign_immediate_sh, source_a, source_b, result;
+module dataPath(input  logic        clk, reset,
+                input  logic        memtoreg, pcsrc,
+                input  logic        alusrc, regdst,
+                input  logic        regwrite, jump,
+                input  logic [2:0]  alucontrol,
+                output logic        zero,
+                output logic [31:0] pc,
+                input  logic [31:0] instr,
+                output logic [31:0] aluout, writedata,
+                input  logic [31:0] readdata);
 
-	flopr#(32) pc_register(clk, reset, pc_next, pc);
-	adder pc_add1(pc, 32'b100, pc_plus4);
-	sl2 immsh(sign_immediate, sign_immediate_sh);
-	adder pcadd2(pc_plus4, sign_immediate_sh,pc_branch);
-	mux2#(32) pcbrmux(pc_plus4, pc_branch, pc_src, pc_next_br);
-	mux2#(32) pcmux(pc_next_br, {pc_plus4[31:28], instruction [25:0], 2'b00}, jump, pc_next);
+  logic [4:0]  writereg;
+  logic [31:0] pcnext, pcnextbr, pcplus4, pcbranch;
+  logic [31:0] signimm, signimmsh;
+  logic [31:0] srca, srcb;
+  logic [31:0] result;
 
-	regFile rf(clk, reg_write, instruction[25:21], instruction[20:16], write_reg, result, source_a, write_data);
-	mux2#(5) wrmux(instruction[20:16], instruction[15:11], regdst, write_reg);
-	mux2#(32) resmux(alu_out, read_data, mem_to_reg, result);
-	mux2#(32) source_b_mux(write_data, sign_immediate, alu_src, source_b);
-	alu alu(source_a, source_b, alu_control, alu_out, zero);
+  // next PC logic
+  flopr #(32) pcreg(clk, reset, pcnext, pc);
+  adder       pcadd1(pc, 32'b100, pcplus4);
+  sl2         immsh(signimm, signimmsh);
+  adder       pcadd2(pcplus4, signimmsh, pcbranch);
+  mux2 #(32)  pcbrmux(pcplus4, pcbranch, pcsrc, pcnextbr);
+  mux2 #(32)  pcmux(pcnextbr, {pcplus4[31:28], 
+                    instr[25:0], 2'b00}, jump, pcnext);
 
+  // register file logic
+  regfile     rf(clk, regwrite, instr[25:21], instr[20:16], 
+                 writereg, result, srca, writedata);
+  mux2 #(5)   wrmux(instr[20:16], instr[15:11],
+                    regdst, writereg);
+  mux2 #(32)  resmux(aluout, readdata, memtoreg, result);
+  signExt     se(instr[15:0], signimm);
+
+  // ALU logic
+  mux2 #(32)  srcbmux(writedata, signimm, alusrc, srcb);
+  alu         alu(srca, srcb, alucontrol, aluout, zero);
 endmodule

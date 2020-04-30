@@ -1,11 +1,22 @@
-module processor(input logic clk, reset, input logic [31:0] instruc, input logic [31:0] read_data, output logic mem_write, output logic [31:0] pc, alu_out, write_data);
-	logic mem_reg, alu_src, reg_dst, reg_write, jump, pc_src, z;
+module processor(input  logic        clk, reset,
+            output logic [31:0] pc,
+            input  logic [31:0] instr,
+            output logic        memwrite,
+            output logic [31:0] aluout, writedata,
+            input  logic [31:0] readdata);
 
-	logic [2:0] alu_control;
+  logic       memtoreg, alusrc, regdst, 
+              regwrite, jump, pcsrc, zero;
+  logic [2:0] alucontrol;
 
-	controller cont(instruc[31:26], instruc[5:0], z, mem_reg, mem_write, pc_src, alu_src, reg_dst, reg_write, jump, alu_control);
-
-	dataPath dpath(clk, reset, mem_reg, pc_src, alu_src, reg_dst, reg_write, jump, alu_control, zero, pc, instruc, alu_out, write_data, read_data);
-
+  controller c(instr[31:26], instr[5:0], zero,
+               memtoreg, memwrite, pcsrc,
+               alusrc, regdst, regwrite, jump,
+               alucontrol);
+  dataPath dp(clk, reset, memtoreg, pcsrc,
+              alusrc, regdst, regwrite, jump,
+              alucontrol,
+              zero, pc, instr,
+              aluout, writedata, readdata);
 endmodule
 

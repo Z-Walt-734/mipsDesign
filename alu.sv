@@ -1,20 +1,20 @@
-module alu (A, B, F, Y, Zero);
-	input [31:0] A, B;
-	input [2:0] F;
-	output reg [31:0] Y;
-	output Zero;
-	wire [31:0] SUM, Bout;
-	
-	assign Bout = F[2]? ~B: B;
-		
-	assign SUM = A + Bout + F[2];
-	assign Zero = (Y == 0);
-	
-	always @(*)
-		case(F[1:0])
-			2'b00: Y = A & Bout;
-			2'b01: Y = A | Bout;
-			2'b10: Y = SUM;
-			2'b11: Y = SUM[31];
-		endcase
+module alu(input  logic [31:0] a, b,
+           input  logic [2:0]  alucontrol,
+           output logic [31:0] result,
+           output logic        zero);
+
+  logic [31:0] condinvb, sum;
+
+  assign condinvb = alucontrol[2] ? ~b : b;
+  assign sum = a + condinvb + alucontrol[2];
+
+  always_comb
+    case (alucontrol[1:0])
+      2'b00: result = a & b;
+      2'b01: result = a | b;
+      2'b10: result = sum;
+      2'b11: result = sum[31];
+    endcase
+
+  assign zero = (result == 32'b0);
 endmodule

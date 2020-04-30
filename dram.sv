@@ -1,13 +1,18 @@
-module dram (input clk, we, input [31:0] adder, write_data, output [31:0] read_data);
-	logic [31:0] ram_data [63:0];
+module dram (input logic clock, we,
+    input logic [11:0]  addr, 
+    input logic [31:0]  wd,
+    output logic [31:0]  rd);
 
-	always@(ram_data[adder])begin
-		read_data = ram_data[adder];
-	end
+    reg [31:0] ram [127:0];
+    integer i;
+    initial begin
+        for (i=0; i<127; i=i+1) begin
+            ram[i] = 32'b0;
+        end
+    end
+    always_ff @(posedge clock) begin
+        if (we) ram[addr] <= wd;
+    end
+    assign rd = ram[addr];
 
-	always@(posedge clk)begin
-		if(we)begin
-			ram_data[adder[31:2]] <= write_data;
-		end
-	end
 endmodule
